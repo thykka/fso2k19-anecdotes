@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { updateFilter } from '../reducers/filterReducer';
 
 const Filter = props => {
   const handleChange = evt => {
-    props.store.dispatch({ type: 'UPDATE_FILTER', filter: evt.currentTarget.value });
+    props.updateFilter(evt.currentTarget.value);
   };
 
   return (
@@ -12,4 +14,8 @@ const Filter = props => {
   );
 };
 
-export default Filter;
+const mapDispatchToProps = {
+  updateFilter
+};
+
+export default connect(null, mapDispatchToProps)(Filter);

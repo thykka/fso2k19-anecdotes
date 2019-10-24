@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { voteAnecdote } from '../reducers/anecdoteReducer';
 import { flashNotification } from '../reducers/notificationReducer';
 
 const AnecdoteList = (props) => {
-  const { anecdotes, filter } = props.store.getState();
+  const { anecdotes, filter } = props;
 
   const vote = (id) => {
     props.store.dispatch(voteAnecdote(id));
@@ -15,7 +16,7 @@ const AnecdoteList = (props) => {
   const visibleAnecdotes = () => {
     if(filter === '') return anecdotes;
     return anecdotes.filter(anecdote => {
-      return anecdote.content.toLowerCase().includes(filter.toLowerCase());
+      return (anecdote.content || '').toLowerCase().includes(filter.toLowerCase());
     });
   };
 
@@ -37,4 +38,11 @@ const AnecdoteList = (props) => {
   )
 };
 
-export default AnecdoteList;
+const mapStateToProps = state => {
+  return {
+    anecdotes: state.anecdotes,
+    filter: state.filter
+  };
+};
+
+export default connect(mapStateToProps)(AnecdoteList);
