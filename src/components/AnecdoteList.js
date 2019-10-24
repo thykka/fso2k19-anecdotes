@@ -3,7 +3,7 @@ import { voteAnecdote } from '../reducers/anecdoteReducer';
 import { flashNotification } from '../reducers/notificationReducer';
 
 const AnecdoteList = (props) => {
-  const { anecdotes } = props.store.getState();
+  const { anecdotes, filter } = props.store.getState();
 
   const vote = (id) => {
     props.store.dispatch(voteAnecdote(id));
@@ -12,10 +12,17 @@ const AnecdoteList = (props) => {
     }"`);
   };
 
+  const visibleAnecdotes = () => {
+    if(filter === '') return anecdotes;
+    return anecdotes.filter(anecdote => {
+      return anecdote.content.toLowerCase().includes(filter.toLowerCase());
+    });
+  };
+
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      { visibleAnecdotes().map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}

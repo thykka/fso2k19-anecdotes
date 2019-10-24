@@ -38,7 +38,6 @@ const setNotification = (state, message, id) => {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log(action.type, action.data);
   switch(action.type) {
     case 'SHOW_NOTIFICATION':
       return setNotification(state, action.data.message, action.data.id);
