@@ -1,29 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { voteAnecdote } from '../reducers/anecdoteReducer';
-import { flashNotification } from '../reducers/notificationReducer';
+import { showNotification, hideNotification, flashNotification } from '../reducers/notificationReducer';
 
 const AnecdoteList = (props) => {
-  const { anecdotes, filter } = props;
+  const { anecdotes } = props;
 
   const vote = (id) => {
-    props.store.dispatch(voteAnecdote(id));
+    props.voteAnecdote(id);
+
+    const nid = Math.random();
+    props.showNotification(`Added "${ anecdotes.find(a => a.id === id).content }"`, nid);
+    setTimeout(() => {
+      props.hideNotification(nid);
+    }, 5000);
+
+    /* TODO: requires Thunk.
     flashNotification(props.store.dispatch, `Voted "${
       anecdotes.find(a => a.id === id).content
     }"`);
-  };
-
-  const visibleAnecdotes = () => {
-    if(filter === '') return anecdotes;
-    return anecdotes.filter(anecdote => {
-      return (anecdote.content || '').toLowerCase().includes(filter.toLowerCase());
-    });
+    */
   };
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      { visibleAnecdotes().map(anecdote =>
+      { props.visibleAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -38,11 +40,20 @@ const AnecdoteList = (props) => {
   )
 };
 
+const filterAnecdotes = ({ anecdotes, filter }) => {
+  return filter === ''
+    ? anecdotes
+    : anecdotes.filter(anecdote =>
+        anecdote.content.match(new RegExp(filter, 'i'))
+      );
+}
+
 const mapStateToProps = state => {
   return {
     anecdotes: state.anecdotes,
-    filter: state.filter
+    filter: state.filter,
+    visibleAnecdotes: filterAnecdotes(state)
   };
 };
 
-export default connect(mapStateToProps)(AnecdoteList);
+export default connect(mapStateToProps, { showNotification, hideNotification, voteAnecdote })(AnecdoteList);

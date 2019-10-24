@@ -31,11 +31,5 @@ const AnecdoteForm = (props) => {
     </div>
   );
 };
-const mapStateToProps = state => ({
 
-});
-const mapDispatchToProps = {
-  createAnecdote, showNotification, hideNotification
-};
-
-export default connect(null, mapDispatchToProps)(AnecdoteForm);
+export default connect(null, { createAnecdote, showNotification, hideNotification })(AnecdoteForm);
