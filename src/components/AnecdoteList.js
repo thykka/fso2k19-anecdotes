@@ -10,7 +10,7 @@ const AnecdoteList = (props) => {
     props.voteAnecdote(id);
 
     const nid = Math.random();
-    props.showNotification(`Added "${ anecdotes.find(a => a.id === id).content }"`, nid);
+    props.showNotification(`Voted "${ anecdotes.find(a => a.id === id).content }"`, nid);
     setTimeout(() => {
       props.hideNotification(nid);
     }, 5000);
