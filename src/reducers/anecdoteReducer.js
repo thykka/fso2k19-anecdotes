@@ -1,5 +1,3 @@
-const getId = () => (100000 * Math.random()).toFixed(0)
-
 const vote = function (state, id) {
   if(!state.find(anecdote => anecdote.id === id)) return state;
   return state.map(anecdote => anecdote.id !== id ? anecdote : {
@@ -11,14 +9,10 @@ const create = function(state, anecdote) {
   return [...state, anecdote];
 }
 
-const createAnecdote = content => {
+const createAnecdote = anecdote => {
   return {
     type: 'CREATE',
-    data: {
-      content,
-      id: getId(),
-      votes: 0
-    }
+    data: anecdote
   };
 };
 

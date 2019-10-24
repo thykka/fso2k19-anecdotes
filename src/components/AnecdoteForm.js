@@ -3,22 +3,29 @@ import { connect } from 'react-redux';
 import { useField } from '../hooks/index';
 import { createAnecdote } from '../reducers/anecdoteReducer';
 import { showNotification, hideNotification, flashNotification } from '../reducers/notificationReducer';
+import anecdoteService from '../services/anecdotes';
 
 const AnecdoteForm = (props) => {
   const newAnecdote = useField('text');
 
-  const createNote = evt => {
+  const createNote = async evt => {
     const id = Math.random();
     evt.preventDefault();
-    const anecdoteText = evt.target.newAnecdote.value;
-    props.createAnecdote(anecdoteText);
-    props.showNotification(`Added "${ anecdoteText }"`, id);
+    const content = evt.target.newAnecdote.value;
+    evt.target.newAnecdote.value = '';
+    const newAnecdote = await anecdoteService.createNew(content);
+
+    console.log(newAnecdote)
+
+    props.createAnecdote(newAnecdote);
+    props.showNotification(`Added "${ content }"`, id);
+
     setTimeout(() => {
       props.hideNotification(id);
     }, 5000);
+
     // TODO: This needs Thunk.
-    //flashNotification(props.store.dispatch, `Added "${ anecdoteText }"`)
-    evt.target.newAnecdote.value = '';
+    //flashNotification(props.store.dispatch, `Added "${ content }"`)
   };
 
   return (
