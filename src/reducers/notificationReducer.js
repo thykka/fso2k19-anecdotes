@@ -16,7 +16,7 @@ export const showNotification = (message, id) => {
 export const hideNotification = (id) => {
   return {
     type: 'HIDE_NOTIFICATION',
-    data: { message: '', visible: false, id }
+    data: { visible: false, id }
   }
 };
 
