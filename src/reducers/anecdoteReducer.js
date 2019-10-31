@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes';
+
 const vote = function (state, id) {
   if(!state.find(anecdote => anecdote.id === id)) return state;
   return state.map(anecdote => anecdote.id !== id ? anecdote : {
@@ -25,10 +27,15 @@ const voteAnecdote = id => {
 
 const descendingVotes = (a, b) => b.votes - a.votes;
 
-const initializeAnecdotes = anecdotes => ({
-  type: 'INITIALIZE_ANECDOTES',
-  data: anecdotes
-});
+const initializeAnecdotes = anecdotes => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INITIALIZE_ANECDOTES',
+      data: anecdotes
+    })
+  }
+};
 
 export { createAnecdote, voteAnecdote, initializeAnecdotes };
 
