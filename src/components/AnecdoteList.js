@@ -8,7 +8,7 @@ const AnecdoteList = (props) => {
 
   const vote = (id) => {
     props.voteAnecdote(id);
-    props.flashNotification(`Voted "${ anecdotes.find(a => a.id === id).content }"`);
+    props.flashNotification(`Voted "${ anecdotes.find(a => a.id === id).content }"`, 3);
   };
 
   return (

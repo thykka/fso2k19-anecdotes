@@ -6,13 +6,13 @@ const initialState = {
 
 let notificationId = 0;
 
-export const flashNotification = (message) => {
+export const flashNotification = (message, duration = 5) => {
   const id = notificationId++;
   return dispatch => {
     dispatch(showNotification(message, id));
     setTimeout(() => {
       dispatch(hideNotification(id));
-    }, 5000);
+    }, duration * 1000);
   };
 };
 
