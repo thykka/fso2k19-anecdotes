@@ -11,10 +11,13 @@ const create = function(state, anecdote) {
   return [...state, anecdote];
 }
 
-const createAnecdote = anecdote => {
-  return {
-    type: 'CREATE',
-    data: anecdote
+const createAnecdote = content => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(content);
+    dispatch({
+      type: 'CREATE',
+      data: newAnecdote
+    });
   };
 };
 
@@ -27,9 +30,10 @@ const voteAnecdote = id => {
 
 const descendingVotes = (a, b) => b.votes - a.votes;
 
-const initializeAnecdotes = anecdotes => {
+const initializeAnecdotes = () => {
   return async dispatch => {
-    const anecdotes = await anecdoteService.getAll()
+    const anecdotes = await anecdoteService.getAll();
+    console.log(anecdotes);
     dispatch({
       type: 'INITIALIZE_ANECDOTES',
       data: anecdotes
