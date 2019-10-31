@@ -1,9 +1,9 @@
 import anecdoteService from '../services/anecdotes';
 
-const vote = function (state, id) {
+const vote = function (state, id, votes) {
   if(!state.find(anecdote => anecdote.id === id)) return state;
   return state.map(anecdote => anecdote.id !== id ? anecdote : {
-    ...anecdote, votes: anecdote.votes + 1
+    ...anecdote, votes
   });
 }
 
@@ -22,9 +22,12 @@ const createAnecdote = content => {
 };
 
 const voteAnecdote = id => {
-  return {
-    type: 'VOTE',
-    data: { id }
+  return async dispatch => {
+    const updatedAnecdote = await anecdoteService.addVote(id);
+    dispatch({
+      type: 'VOTE',
+      data: { id, votes: updatedAnecdote.votes }
+    });
   };
 };
 
@@ -50,7 +53,7 @@ const reducer = (state = [], action) => {
       updatedState = create(state, action.data);
       break;
     case 'VOTE':
-      updatedState = vote(state, action.data.id);
+      updatedState = vote(state, action.data.id, action.data.votes);
       break;
     case 'INITIALIZE_ANECDOTES':
       updatedState = action.data;

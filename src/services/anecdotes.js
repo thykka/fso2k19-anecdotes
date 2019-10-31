@@ -17,4 +17,14 @@ const createNew = async content => {
   return response.data;
 }
 
-export default { getAll, createNew };
+const addVote = async id => {
+  const anecdote = await axios.get(baseURL + '/' + id);
+  if(anecdote.status === 200) {
+    const updatedAnecdote = await axios.patch(baseURL + '/' + id, {
+      votes: anecdote.data.votes + 1
+    });
+    return updatedAnecdote.data;
+  }
+}
+
+export default { getAll, createNew, addVote };
