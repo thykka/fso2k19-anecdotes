@@ -1,25 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { voteAnecdote } from '../reducers/anecdoteReducer';
-import { showNotification, hideNotification, flashNotification } from '../reducers/notificationReducer';
+import { flashNotification } from '../reducers/notificationReducer';
 
 const AnecdoteList = (props) => {
   const { anecdotes } = props;
 
   const vote = (id) => {
     props.voteAnecdote(id);
-
-    const nid = Math.random();
-    props.showNotification(`Voted "${ anecdotes.find(a => a.id === id).content }"`, nid);
-    setTimeout(() => {
-      props.hideNotification(nid);
-    }, 5000);
-
-    /* TODO: requires Thunk.
-    flashNotification(props.store.dispatch, `Voted "${
-      anecdotes.find(a => a.id === id).content
-    }"`);
-    */
+    props.flashNotification(`Voted "${ anecdotes.find(a => a.id === id).content }"`);
   };
 
   return (
@@ -56,4 +45,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { showNotification, hideNotification, voteAnecdote })(AnecdoteList);
+export default connect(mapStateToProps, { flashNotification, voteAnecdote })(AnecdoteList);

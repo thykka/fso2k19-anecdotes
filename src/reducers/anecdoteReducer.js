@@ -36,7 +36,6 @@ const descendingVotes = (a, b) => b.votes - a.votes;
 const initializeAnecdotes = () => {
   return async dispatch => {
     const anecdotes = await anecdoteService.getAll();
-    console.log(anecdotes);
     dispatch({
       type: 'INITIALIZE_ANECDOTES',
       data: anecdotes

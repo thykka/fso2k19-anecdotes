@@ -6,27 +6,29 @@ const initialState = {
 
 let notificationId = 0;
 
-export const showNotification = (message, id) => {
+export const flashNotification = (message) => {
+  const id = notificationId++;
+  return dispatch => {
+    dispatch(showNotification(message, id));
+    setTimeout(() => {
+      dispatch(hideNotification(id));
+    }, 5000);
+  };
+};
+
+const showNotification = (message, id) => {
   return {
     type: 'SHOW_NOTIFICATION',
     data: { message, visible: true, id }
   }
 };
 
-export const hideNotification = (id) => {
+const hideNotification = (id) => {
   return {
     type: 'HIDE_NOTIFICATION',
     data: { visible: false, id }
   }
 };
-
-export const flashNotification = (dispatch, message) => {
-  const id = notificationId++;
-  dispatch(showNotification(message, id));
-  setTimeout(() => {
-    dispatch(hideNotification(id));
-  }, 5000);
-}
 
 const setNotification = (state, message, id) => {
   return {
